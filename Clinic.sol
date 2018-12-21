@@ -1,5 +1,4 @@
-pragma experimental ABIEncoderV2;
-pragma solidity >= 0.4.25;
+pragma solidity >=0.4.22 <0.6.0;
 import "./BloodDonation.sol";
 
 contract Clinic is BloodDonation{
@@ -27,10 +26,22 @@ contract Clinic is BloodDonation{
         require (hosp.availability[blood] >= amount); _;
     }
 
-    function collect(Donor memory _don, uint _ml) public{
-         hosp.availability [_don.blood] += _ml;
-         _don.token += 1;
-         donations.push (Donation(now, _don, hosp));
+    function findDonor (address _name) view private returns(uint){
+        for (uint i=0; i < donors.length; i++){
+            if (_name == donors[i].donorAddress){
+                return i;
+            }
+        }
+        return 1001 ;
+    }
+
+    function collect(address addr, uint _ml) public{
+        uint index = findDonor (addr);
+       if (index > 1000) return;
+        Donor memory don = donors [index];
+         hosp.availability [don.blood] += _ml;
+         don.token += 1;
+         donations.push (Donation(now, don, hosp));
         // donations.push (Donation(now, _don));
     }
     

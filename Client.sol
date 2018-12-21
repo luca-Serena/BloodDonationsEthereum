@@ -1,6 +1,4 @@
-pragma experimental ABIEncoderV2;
-pragma solidity >= 0.4.25;
-import "./Clinic.sol" as clinic;
+pragma solidity >=0.4.22 <0.6.0;
 import "./BloodDonation.sol";
 
 contract Client is BloodDonation{
@@ -12,7 +10,7 @@ contract Client is BloodDonation{
         addr = msg.sender;
     }
     
-    function findHospital (string memory _name) private returns(uint){
+   function findHospital (string memory _name) view private returns(uint){
         bytes memory nameHosp = bytes (_name);
         for (uint i=0; i < hospitals.length; i++){
             bytes memory temp = bytes (hospitals[i].name);
