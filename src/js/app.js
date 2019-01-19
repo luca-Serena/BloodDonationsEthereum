@@ -77,10 +77,10 @@ App = {
 
       $("#buttonJoin").click(function(){
             var bloodType = $("#bloodSelectJoin").val();
-            $('#bloodSelectJoin').prop('disabled',true).css('opacity',0.5);
-            $('#buttonJoin').prop('disabled',true).css('opacity',0.5);
-            
+         //   $('#bloodSelectJoin').prop('disabled',true).css('opacity',0.5);
+           // $('#buttonJoin').prop('disabled',true).css('opacity',0.5);
             clinicInstance.join(bloodType);
+            $("#joining").hide();
          }
       );
 
@@ -92,8 +92,9 @@ App = {
 
      return clinicInstance.getTokens(App.account);
   }).then(function(tokens){
-        if (tokens > 0){
+        if (tokens >= 0){
             $("#accountAddress").html("You own " + tokens + " tokens");
+           // $("#accountAddress").css({"font-family": "Arial, Helvetica, sans-serif", "font-size": "200%"});
         }
     return clinicInstance.getDonorsLength();
       }).then(function(total){
