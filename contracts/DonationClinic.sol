@@ -24,10 +24,10 @@ contract DonationClinic {
     Reservation []  reservations;
     string [8] bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "0+", "0-"];
     
-    constructor () payable public {
+    constructor () public {
         for (uint i =0; i < bloodTypes.length; i++ ){
             bloodArray[i].name = bloodTypes[i];
-            bloodArray [i].avail = 100;
+            bloodArray [i].avail = 0;
         }
     }
     
@@ -43,7 +43,7 @@ contract DonationClinic {
         reservations[reservationIndex].time = now;
     }
     
-    function dispense (string memory blood, uint ml) public payable noUnderZero (blood, ml){
+    function dispense (string memory blood, uint ml) public noUnderZero (blood, ml){
         uint bloodInd = getIndex (blood);
         bloodArray[bloodInd].avail -=ml;
     }
@@ -55,9 +55,10 @@ contract DonationClinic {
         donors.push(Donor(blood,msg.sender,0,false));
     }
     
-    function book () payable public {
+    function book ()  public {
         uint donorIndex = findDonor(msg.sender);
         require (donorIndex < 1000);
+        require (donors[donorIndex].isBooked==false);
         reservations.push(Reservation(0, donors[donorIndex]));
         donors[donorIndex].isBooked = true;
     }
@@ -97,7 +98,7 @@ contract DonationClinic {
     }
     
     function findReservation (address _address) view private returns(uint){
-        for (uint i=0; i < reservations.length; i++){
+        for (uint i=reservations.length - 1; i >= 0; i--){
             if (_address == reservations[i].giver.donorAddress){
                 return i;
             }
